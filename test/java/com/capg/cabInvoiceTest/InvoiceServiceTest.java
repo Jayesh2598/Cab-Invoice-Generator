@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.capg.cabInvoice.CabInvoiceGenerator;
 import com.capg.cabInvoice.InvoiceSummary;
 import com.capg.cabInvoice.Ride;
+import com.capg.cabInvoice.RideRepository;
 
 public class InvoiceServiceTest {
 	
@@ -39,6 +40,17 @@ public class InvoiceServiceTest {
 	public void givenMultipleRidesShouldReturnInvoiceSummary() {
 		Ride[] rides = { new Ride(10.0, 20), new Ride(0.1, 2) };
 		InvoiceSummary invoiceSummary = cabInvoiceGenerator.multipleRidesFare(rides);
+		InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(2, 125);
+		assertEquals(expectedInvoiceSummary, invoiceSummary);
+	}
+	
+	@Test
+	public void givenUserIDShouldReturnRidesInvoiceSummary() {
+		int userID = 1;
+		Ride[] rides = { new Ride(10.0, 20), new Ride(0.1, 2) };
+		RideRepository rideRepository = new RideRepository();
+		rideRepository.addEntry(userID, rides);
+		InvoiceSummary invoiceSummary = cabInvoiceGenerator.multipleRidesFare(rideRepository.getRides(userID));
 		InvoiceSummary expectedInvoiceSummary = new InvoiceSummary(2, 125);
 		assertEquals(expectedInvoiceSummary, invoiceSummary);
 	}
